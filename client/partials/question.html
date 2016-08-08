@@ -1,0 +1,13 @@
+<div ng-controller='questionController' id='question'>
+	<style>#question{ border: 2px solid black; width: 800px;padding: 10px; }h4{margin-left:  650px}</style>
+	<h3><a href="#/">Logout</a></h3>
+	<h3><a href="#/dashboard">HOME</a> </h3>
+	<h2>New Question</h2>
+	Question <textarea ng-model='question.questions' cols='22' rows='2'></textarea><br>
+	Description <textarea ng-model='question.descriptions' cols='20' rows='2'></textarea><br>
+	<button>Cancel</button>
+	<button ng-click='create_question()'>Submit</button>
+
+
+
+</div>

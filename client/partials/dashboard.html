@@ -1,0 +1,26 @@
+<div ng-controller='questionController' >
+	<div class='top'>
+		<style>h3, input{margin-left: 650px} table, .top{width: 800px;} .top{border: 2px solid black}</style>
+		<h2>Hi {{loggedInUser.username}}!</h2>
+		<h3><a href="#/">Logout</a></h3>
+		<h2><a href="#/question">Add a question</a></h2> 
+		<input type='text' ng-model='filter' placeholder='Search'><br><br>
+
+		<table border='1'>
+			<tr>
+				<th>Questions</th>
+				<th>Answer</th>
+				<th>Action</th>
+			</tr>
+			<tr ng-repeat='question in questions | filter: filter'>
+				<td>{{question.question}}</td>
+				<td>{{question._answers.length}}</td>
+				<td><a href="#/answers/{{question._id}}">Show</a>  <a href="#/answer/{{question._id}}">Answer</a></td>
+			
+
+			</tr>
+
+		</table>
+	</div>
+
+</div>

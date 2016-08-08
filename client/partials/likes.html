@@ -1,0 +1,13 @@
+<div ng-controller='questionController' id='likes'>
+	<style>#likes{ border: 2px solid black; width: 800px;padding: 10px;}</style>
+
+	<h3><a href="#/dashboard">HOME</a> |<a href="#/answer/{{question._id}}">Answer this Question</a></h3>
+	<h1>{{question.question}}</h1>
+	<h4>{{question.description}}</h4>
+	<table>
+		<tr ng-repeat="answer in question._answers | orderBy:'-likes' ">
+			<td>{{loggedInUser.username}}<br>{{answer.answer}}<br> {{answer.description}} ................................{{answer.likes}} likes<button ng-click='likes(answer._id)'>Like!</button></td><hr>s
+		</tr>
+	</table>
+
+</div>

@@ -1,0 +1,140 @@
+<html>
+<head>
+    <title>MEAN Black Belt Exam</title>
+    <script src="angular/angular.js" charset="utf-8"></script>
+    <script src="angular-route/angular-route.js" charset="utf-8"></script>
+    <script>
+    var myApp= angular.module('myApp', ['ngRoute']); 
+
+    myApp.config(function($routeProvider){
+        $routeProvider
+        .when('/',{
+            templateUrl:'/partials/login.html'
+        })
+        .when('/dashboard',{
+            templateUrl:'/partials/dashboard.html'
+        })
+        .when('/answer/:id', {
+            templateUrl:'/partials/answer.html'
+        })
+        .when('/question', {
+            templateUrl:'/partials/question.html'
+        })
+        .when ('/answers/:id', {
+            templateUrl:'/partials/likes.html'
+        })
+
+        .otherwise('/')
+    })
+    // //create userFactory
+    myApp.factory('userFactory', function($http, $location){
+        var obj= {};
+        obj.create= function(username){
+            var JSONpackage= {username:username}; 
+            $http.post('/users', JSONpackage).success(function(data){
+                obj.loggedInUser= data; 
+                $location.path('/dashboard'); 
+            })
+        } 
+        return obj; 
+
+    })
+    //create userController
+    myApp.controller('userController', function($scope, userFactory){
+        $scope.create= function(){
+            userFactory.create($scope.username); 
+            $scope.username='';
+        }
+    })
+    //create questionFactory
+    myApp.factory('questionFactory', function($http, $location){
+        var obj= {}; 
+        obj.index= function(callback){
+            $http.get('/questions').success(callback);
+           
+        }
+        obj.create_question= function(question){
+            $http.post('/questions', question).success(function(){
+                $location.path('/dashboard');
+            })
+        }
+        obj.delete_question= function(questionID, callback){
+            $http.delete('/questions/' + questionID).success(callback); 
+            $location.path('/dashboard');
+        }
+        obj.get_question= function(questionID, callback){
+            $http.get('/answers/' + questionID).success(callback);
+        }
+
+        obj.create_answer= function(answer){
+            $http.post('/answers', answer).success(function(){
+                $location.path('/dashboard')   
+            })
+        }
+
+        obj.likes= function(answerID, callback){
+
+            $http.put('/answers/' + answerID).success(callback);
+        }
+
+        return obj; 
+    })
+//create questionController
+    myApp.controller('questionController', function($scope,  questionFactory, $routeParams, $location, userFactory){
+        $scope.loggedInUser= userFactory.loggedInUser; 
+
+        function getAll(){
+            questionFactory.index(function(question){
+                $scope.questions=question;   
+            })
+        }   
+        getAll();
+        $scope.delete_question= function(questionID){
+            questionFactory.delete_question(questionID, getAll);
+        }
+        $scope.create_question= function(){
+            $scope.question.userID= userFactory.loggedInUser._id; 
+            questionFactory.create_question($scope.question);
+        }
+        $scope.create_answer= function(){
+            var newanswer= $scope.answer;
+            newanswer._question = $scope.question._id;
+            questionFactory.create_answer(newanswer);
+        }
+        $scope.display_answer= function(answerID){
+            questionFactory.display_answer(answerID, getAll);
+        }
+        function get_question(){
+            questionFactory.get_question($routeParams.id, function(results){
+                $scope.question= results;
+            });
+        }
+        get_question($routeParams);
+        $scope.likes= function(answerID){
+            $scope.question.userID= userFactory.loggedInUser._id; 
+            questionFactory.likes(answerID, function(answer){
+                    $scope.answer= answer;
+                    get_question();
+            })
+        }
+    })
+    
+    </script>
+
+</head>
+<body ng-app='myApp'>
+
+    <div ng-view></div>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+

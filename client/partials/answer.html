@@ -1,0 +1,15 @@
+<div ng-controller='questionController' id='answer'>
+	<style>#answer{ border: 2px solid black; width: 800px;padding: 10px;}</style>
+	<h4><a href="#/">Logout</a></h4>
+
+	<h3><a href="#/dashboard">HOME</a>| <a href="#/answers/{{question._id}}">Go back to question</a></h3><br>
+
+	 <h3> {{question.question}}</h3>
+	 <h5>{{question.description}}</h5>
+
+	<p>Your Answer <textarea ng-model='answer.answer'></textarea></p>
+	<p>Supporting details for your answer: (optional) <textarea ng-model='answer.description'></textarea><br><br>
+
+	<button ng-click='create_answer()'>Post answer</button>
+
+</div>
